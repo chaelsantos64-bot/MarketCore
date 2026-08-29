@@ -1,13 +1,28 @@
 package marketcore.main;
 
+import marketcore.cliente.Cliente;
 import marketcore.produto.Produto;
 import marketcore.repository.ProdutoRepository;
+import marketcore.service.ClienteService;
 import marketcore.service.ProdutoService;
 
 
 public class TesteConexao {
 
     public static void main(String[] args) {
+        ClienteService clienteService = new ClienteService();
+        // 1. CRIAR NOVO CLIENTE
+        Cliente cliente = new Cliente(
+                1L,
+                "CLIENTE1",
+                "cliente1@com"
+        );
+
+        // 2. CADASTRAR NO BANCO
+        clienteService.cadastrarCliente(cliente);
+
+        System.out.println("=== CLIENTE CADASTRADO ===");
+        
         ProdutoService produtoService = new ProdutoService();
 
         // 1. CRIAR NOVO PRODUTO
