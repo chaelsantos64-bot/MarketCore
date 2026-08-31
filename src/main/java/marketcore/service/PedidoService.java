@@ -29,7 +29,6 @@ public class PedidoService {
         Pedido pedido = new Pedido(cliente,
                 StatusPedido.PENDENTE,
                 id,
-                itens,
                 valorTotal,
                 dataAtual
         );

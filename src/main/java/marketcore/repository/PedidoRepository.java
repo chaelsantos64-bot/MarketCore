@@ -22,7 +22,7 @@ public class PedidoRepository {
 
         String sql = """
                 INSERT INTO pedido
-                (id, cliente_id, status, valor_total, data_pedido)
+                (id, cliente_id, status_pedido, valor_total, data_pedido)
                 VALUES (?, ?, ?, ?, ?)
                 """;
 
@@ -73,7 +73,7 @@ public class PedidoRepository {
                         clienteRepository.buscarCliente(clienteId);
 
                 String statusBanco =
-                        resultSet.getString("status");
+                        resultSet.getString("status_pedido");
 
                 StatusPedido status =
                         StatusPedido.valueOf(statusBanco);
@@ -110,7 +110,7 @@ public class PedidoRepository {
     public void atualizarPedido(Pedido pedido) {
         String sql = """
                 UPDATE pedido 
-                SET cliente_id = ?,  status = ?, valor_total = ?, data_pedido = ?
+                SET cliente_id = ?,  status_pedido = ?, valor_total = ?, data_pedido = ?
                 WHERE id = ?
         """;
 
@@ -159,9 +159,9 @@ public class PedidoRepository {
                         clienteRepository.buscarCliente(clienteId);
 
                 String statusBanco =
-                        resultSet.getString("status");
+                        resultSet.getString("status_pedido");
 
-                StatusPedido status =
+                StatusPedido status_pedido =
                         StatusPedido.valueOf(statusBanco);
 
                 double valorTotal =
@@ -174,7 +174,7 @@ public class PedidoRepository {
 
                 Pedido pedido = new Pedido(
                         cliente,
-                        status,
+                        status_pedido,
                         idBanco,
                         valorTotal,
                         dataPedido
@@ -187,6 +187,34 @@ public class PedidoRepository {
         }catch (SQLException e){
             throw new RuntimeException(
                     "Erro ao listar pedidos no Banco de dados.",
+                    e
+            );
+        }
+    }
+
+    public void excluirPedido(String id) {
+        String sql = """
+                DELETE FROM pedido WHERE id = ?
+        """;
+
+        List <Pedido> pedidos = new ArrayList<>();
+
+        try (
+            Connection connection = ConnectionFactory.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+        ){
+            statement.setString(1,id);
+
+            int linhasExcluidas = statement.executeUpdate();
+
+            if (linhasExcluidas == 0) {
+                throw new PedidoNaoEncontradoException(
+                        "Pedido nao encontrado. ID:" + id
+                );
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(
+                    "Erro ao excluir pedido do banco de dados.",
                     e
             );
         }
