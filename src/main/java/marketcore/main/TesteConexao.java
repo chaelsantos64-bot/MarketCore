@@ -1,75 +1,150 @@
 package marketcore.main;
 
 import marketcore.cliente.Cliente;
+import marketcore.pedido.Pedido;
+import marketcore.pedido.StatusPedido;
 import marketcore.produto.Produto;
-import marketcore.repository.ProdutoRepository;
+import marketcore.repository.PedidoRepository;
 import marketcore.service.ClienteService;
 import marketcore.service.ProdutoService;
 
+import java.time.LocalDateTime;
+import java.util.List;
 
-public class TesteConexao {
+public class Main {
 
     public static void main(String[] args) {
+
         ClienteService clienteService = new ClienteService();
-        // 1. CRIAR NOVO CLIENTE
+        ProdutoService produtoService = new ProdutoService();
+        PedidoRepository pedidoRepository = new PedidoRepository();
+
+        System.out.println("=== MARKET CORE ===");
+
+
+        // CLIENTE
+
         Cliente cliente = new Cliente(
-                1L,
-                "CLIENTE1",
-                "cliente1@com"
+                200L,
+                "Cliente Teste",
+                "cliente@teste.com"
         );
 
-        // 2. CADASTRAR NO BANCO
         clienteService.cadastrarCliente(cliente);
 
-        System.out.println("=== CLIENTE CADASTRADO ===");
-        
-        ProdutoService produtoService = new ProdutoService();
+        Cliente clienteEncontrado =
+                clienteService.buscarCliente(200L);
 
-        // 1. CRIAR NOVO PRODUTO
-        Produto produto = new Produto(
-                "MONITOR GAMER",
-                "P-020",
-                8,
-                1800.0
+        System.out.println("\nCLIENTE ENCONTRADO:");
+        System.out.println(clienteEncontrado);
+
+
+        clienteService.atualizarCliente(
+                200L,
+                "Cliente Atualizado",
+                "clienteatualizado@teste.com"
         );
 
-        // 2. CADASTRAR NO BANCO
+        Cliente clienteAtualizado =
+                clienteService.buscarCliente(200L);
+
+        System.out.println("\nCLIENTE ATUALIZADO:");
+        System.out.println(clienteAtualizado);
+
+
+
+        // PRODUTO
+
+        Produto produto = new Produto(
+                "Notebook Gamer",
+                "P-200",
+                10,
+                4500.00
+        );
+
         produtoService.cadastrarProduto(produto);
 
-        System.out.println("=== PRODUTO CADASTRADO ===");
-
         Produto produtoEncontrado =
-                produtoService.buscarProduto("P-020");
+                produtoService.buscarProduto("P-200");
 
+        System.out.println("\nPRODUTO ENCONTRADO:");
         System.out.println(produtoEncontrado);
 
 
-        // 3. ATUALIZAR PRODUTO
         produtoService.atualizarProduto(
-                "P-020",
-                "MONITOR GAMER 27 POLEGADAS",
-                2100.0,
-                12
+                "P-200",
+                "Notebook Gamer Pro",
+                5200.00,
+                8
         );
 
-        System.out.println("\n=== PRODUTO ATUALIZADO ===");
-
         Produto produtoAtualizado =
-                produtoService.buscarProduto("P-020");
+                produtoService.buscarProduto("P-200");
 
+        System.out.println("\nPRODUTO ATUALIZADO:");
         System.out.println(produtoAtualizado);
 
 
-        // 4. LISTAR TODOS
-        System.out.println("\n=== TODOS OS PRODUTOS ===");
+
+        // PEDIDO
+
+        Pedido pedido = new Pedido(
+                clienteAtualizado,
+                StatusPedido.PENDENTE,
+                "PED-200",
+                produtoAtualizado.getPreco(),
+                LocalDateTime.now()
+        );
+
+        pedidoRepository.cadastrarPedido(pedido);
+
+        Pedido pedidoEncontrado =
+                pedidoRepository.buscarPedido("PED-200");
+
+        System.out.println("\nPEDIDO ENCONTRADO:");
+        System.out.println(pedidoEncontrado);
+
+
+
+        // ATUALIZANDO PEDIDO
+
+        pedidoEncontrado.setStatus(
+                StatusPedido.PROCESSANDO
+        );
+
+        pedidoRepository.atualizarPedido(
+                pedidoEncontrado
+        );
+
+        Pedido pedidoAtualizado =
+                pedidoRepository.buscarPedido("PED-200");
+
+        System.out.println("\nPEDIDO ATUALIZADO:");
+        System.out.println(pedidoAtualizado);
+
+
+
+        // LISTANDO PRODUTOS
+
+        System.out.println("\n=== PRODUTOS ===");
 
         produtoService.listarProdutos();
 
 
-        // 5. EXCLUIR
-        produtoService.excluirProduto("P-020");
 
-        System.out.println("\nProduto P-020 excluído com sucesso.");
+        // LISTANDO PEDIDOS
+
+        System.out.println("\n=== PEDIDOS ===");
+
+        List<Pedido> pedidos =
+                pedidoRepository.listarTodosPedidos();
+
+        for (Pedido pedidoDaLista : pedidos) {
+            System.out.println(pedidoDaLista);
+            System.out.println("----------------------");
+        }
+
+
+        System.out.println("\n=== FIM DO TESTE ===");
     }
-
 }

@@ -95,7 +95,7 @@ public class ProdutoRepository {
                 );
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar produto no banco", e);
+            throw new RuntimeException("Erro ao atualizar produto no banco de dados", e);
         }
     }
 
@@ -150,7 +150,7 @@ public class ProdutoRepository {
             return produtos;
 
         }catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar produtos no banco", e);
+            throw new RuntimeException("Erro ao listar produtos no banco no Banco de dados.", e);
         }
     }
 }
