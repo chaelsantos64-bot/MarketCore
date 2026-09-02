@@ -5,6 +5,7 @@ import marketcore.carrinho.ItemCarrinho;
 import marketcore.cliente.Cliente;
 import marketcore.pedido.Pedido;
 import marketcore.produto.Produto;
+import marketcore.repository.PedidoRepository;
 import marketcore.service.PedidoService;
 import marketcore.service.ProdutoService;
 
@@ -50,7 +51,9 @@ public class Main {
                         + carrinho.calcularTotal()
         );
 
-        PedidoService pedidoService = new PedidoService();
+        PedidoRepository pedidoRepository = new PedidoRepository();
+
+        PedidoService pedidoService = new PedidoService(pedidoRepository);
         Cliente cliente = new Cliente(1L,"micha","micha@gmail.com");
 
         Pedido pedido = pedidoService.criarPedido(cliente,"PED-001",carrinho);

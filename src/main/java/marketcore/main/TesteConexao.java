@@ -1,5 +1,7 @@
 package marketcore.main;
 
+import marketcore.carrinho.Carrinho;
+import marketcore.carrinho.ItemCarrinho;
 import marketcore.cliente.Cliente;
 import marketcore.pedido.ItemPedido;
 import marketcore.pedido.Pedido;
@@ -8,14 +10,15 @@ import marketcore.produto.Produto;
 import marketcore.repository.ItemPedidoRepository;
 import marketcore.repository.PedidoRepository;
 import marketcore.service.ClienteService;
+import marketcore.service.PedidoService;
 import marketcore.service.ProdutoService;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class TesteConexao {
-
     public static void main(String[] args) {
+
 
         ClienteService clienteService = new ClienteService();
         ProdutoService produtoService = new ProdutoService();
@@ -23,8 +26,12 @@ public class TesteConexao {
         PedidoRepository pedidoRepository = new PedidoRepository();
         ItemPedidoRepository itemPedidoRepository = new ItemPedidoRepository();
 
+        PedidoService pedidoService = new PedidoService(pedidoRepository);
 
-        // IDs diferentes a cada execução
+
+        // =========================
+        // IDs ÚNICOS PARA O TESTE
+        // =========================
 
         long codigo = System.currentTimeMillis();
 
@@ -72,7 +79,6 @@ public class TesteConexao {
         System.out.println(clienteAtualizado);
 
 
-
         // =========================
         // PRODUTO
         // =========================
@@ -110,50 +116,49 @@ public class TesteConexao {
         System.out.println(produtoAtualizado);
 
 
-
         // =========================
-        // PEDIDO
+        // CARRINHO
         // =========================
 
-        Pedido pedido = new Pedido(
-                clienteAtualizado,
-                StatusPedido.PENDENTE,
-                pedidoId,
-                produtoAtualizado.getPreco(),
-                LocalDateTime.now()
+        Carrinho carrinho = new Carrinho();
+
+        ItemCarrinho itemCarrinho = new ItemCarrinho(
+                produtoAtualizado,
+                2
         );
 
-        pedidoRepository.cadastrarPedido(pedido);
+        carrinho.adicionarItem(itemCarrinho);
 
-        System.out.println("\nPEDIDO CADASTRADO");
+        System.out.println("\nCARRINHO CRIADO");
 
+        System.out.println(
+                "TOTAL DO CARRINHO: R$ "
+                        + carrinho.calcularTotal()
+        );
+
+        // =========================
+        // CRIAR PEDIDO PELO SERVICE
+        // =========================
+
+        Pedido pedido = pedidoService.criarPedido(
+                clienteAtualizado,
+                pedidoId,
+                carrinho
+        );
+
+        System.out.println("\nPEDIDO CADASTRADO PELO SERVICE:");
+        System.out.println(pedido);
+
+
+        // =========================
+        // BUSCAR PEDIDO PELO SERVICE
+        // =========================
 
         Pedido pedidoEncontrado =
-                pedidoRepository.buscarPedido(pedidoId);
+                pedidoService.buscarPedido(pedidoId);
 
         System.out.println("\nPEDIDO ENCONTRADO:");
         System.out.println(pedidoEncontrado);
-
-
-
-        // =========================
-        // ATUALIZAR PEDIDO
-        // =========================
-
-        pedidoEncontrado.setStatus(
-                StatusPedido.PROCESSANDO
-        );
-
-        pedidoRepository.atualizarPedido(
-                pedidoEncontrado
-        );
-
-        Pedido pedidoAtualizado =
-                pedidoRepository.buscarPedido(pedidoId);
-
-        System.out.println("\nPEDIDO ATUALIZADO:");
-        System.out.println(pedidoAtualizado);
-
 
 
         // =========================
@@ -169,7 +174,6 @@ public class TesteConexao {
         );
 
         System.out.println("\nITEM PEDIDO CADASTRADO");
-
 
 
         // =========================
@@ -200,59 +204,24 @@ public class TesteConexao {
             );
 
             System.out.println(
-                    "Preço unitário: R$ " + item.getPrecoUnitario()
+                    "Preço unitário: R$ "
+                            + item.getPrecoUnitario()
             );
 
             System.out.println("-------------------------");
         }
 
 
-
         // =========================
-        // ATUALIZAR ITEM PEDIDO
+        // LISTAR PEDIDOS PELO SERVICE
         // =========================
 
-        ItemPedido itemAtualizado = new ItemPedido(
-                itemId,
-                pedidoId,
-                produtoId,
-                3,
-                4800.00
+        System.out.println(
+                "\n========== PEDIDOS =========="
         );
-
-        itemPedidoRepository.atualizarItemPedido(
-                itemAtualizado
-        );
-
-        System.out.println("\nITEM PEDIDO ATUALIZADO");
-
-
-        List<ItemPedido> itensAtualizados =
-                itemPedidoRepository.buscarItensPorPedido(pedidoId);
-
-        for (ItemPedido item : itensAtualizados) {
-
-            System.out.println(
-                    "Quantidade atualizada: "
-                            + item.getQuantidade()
-            );
-
-            System.out.println(
-                    "Preço atualizado: R$ "
-                            + item.getPrecoUnitario()
-            );
-        }
-
-
-
-        // =========================
-        // LISTAR PEDIDOS
-        // =========================
-
-        System.out.println("\n========== PEDIDOS ==========");
 
         List<Pedido> pedidos =
-                pedidoRepository.listarTodosPedidos();
+                pedidoService.listarPedidos();
 
         for (Pedido pedidoDaLista : pedidos) {
 
@@ -265,23 +234,38 @@ public class TesteConexao {
 
 
         // =========================
-        // LISTAR PRODUTOS
+        // FINALIZAR PEDIDO
         // =========================
 
-        System.out.println("\n========== PRODUTOS ==========");
+        pedidoService.finalizarPedido(
+                pedido,
+                carrinho
+        );
 
-        produtoService.listarProdutos();
+        System.out.println("\nPEDIDO FINALIZADO");
 
+
+        // BUSCA NOVAMENTE NO BANCO
+        Pedido pedidoFinalizado =
+                pedidoService.buscarPedido(pedidoId);
+
+        System.out.println(
+                "\nPEDIDO APÓS FINALIZAÇÃO:"
+        );
+
+        System.out.println(pedidoFinalizado);
 
 
         // =========================
         // TESTANDO DELETE
         // =========================
 
-        System.out.println("\n========== EXCLUSÕES ==========");
+        System.out.println(
+                "\n========== EXCLUSÕES =========="
+        );
 
 
-        // primeiro exclui o item por causa das Foreign Keys
+        // primeiro ItemPedido por causa da FK
 
         itemPedidoRepository.excluirItemPedido(itemId);
 
@@ -290,7 +274,9 @@ public class TesteConexao {
         );
 
 
-        pedidoRepository.excluirPedido(pedidoId);
+        // agora usando PedidoService
+
+        pedidoService.excluirPedido(pedidoId);
 
         System.out.println(
                 "Pedido excluído."

@@ -197,8 +197,6 @@ public class PedidoRepository {
                 DELETE FROM pedido WHERE id = ?
         """;
 
-        List <Pedido> pedidos = new ArrayList<>();
-
         try (
             Connection connection = ConnectionFactory.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
