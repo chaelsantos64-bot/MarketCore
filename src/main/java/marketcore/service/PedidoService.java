@@ -19,7 +19,7 @@ public class PedidoService {
         this.pedidoRepository = pedidoRepository;
     }
 
-    public Pedido criarPedido(Cliente cliente ,String id, Carrinho carrinho) {
+    public Pedido criarPedido(Cliente cliente, String id, Carrinho carrinho) {
         if (carrinho.getItens().isEmpty()) {
             throw new CarrinhoVazioException("O CARRINHO ESTA VAZIO");
         }
@@ -42,7 +42,7 @@ public class PedidoService {
     }
 
 
-    public List<Pedido> listarPedidos(){
+    public List<Pedido> listarPedidos() {
         return pedidoRepository.listarTodosPedidos();
     }
 
@@ -60,5 +60,26 @@ public class PedidoService {
         pedido.setStatus(StatusPedido.CONCLUIDO);
         pedidoRepository.atualizarPedido(pedido);
         carrinho.limparCarrinho();
+    }
+
+    public void cancelarPedido(String id) {
+
+        Pedido pedido = pedidoRepository.buscarPedido(id);
+
+        if (pedido.getStatus() == StatusPedido.CONCLUIDO) {
+            throw new IllegalStateException(
+                    "Pedido concluido nao pode ser cancelado."
+            );
+        }
+
+        if (pedido.getStatus() == StatusPedido.CANCELADO) {
+            throw new IllegalStateException(
+                    "Pedido ja esta cancelado."
+            );
+        }
+
+        pedido.setStatus(StatusPedido.CANCELADO);
+
+        pedidoRepository.atualizarPedido(pedido);
     }
 }

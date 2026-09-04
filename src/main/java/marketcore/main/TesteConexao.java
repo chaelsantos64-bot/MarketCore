@@ -19,6 +19,9 @@ import java.util.List;
 public class TesteConexao {
     public static void main(String[] args) {
 
+        // =========================
+        // SERVICES E REPOSITORIES
+        // =========================
 
         ClienteService clienteService = new ClienteService();
         ProdutoService produtoService = new ProdutoService();
@@ -26,22 +29,34 @@ public class TesteConexao {
         PedidoRepository pedidoRepository = new PedidoRepository();
         ItemPedidoRepository itemPedidoRepository = new ItemPedidoRepository();
 
-        PedidoService pedidoService = new PedidoService(pedidoRepository);
+        PedidoService pedidoService =
+                new PedidoService(pedidoRepository);
 
 
         // =========================
-        // IDs ÚNICOS PARA O TESTE
+        // IDs ÚNICOS
         // =========================
 
         long codigo = System.currentTimeMillis();
 
         Long clienteId = codigo;
-        String produtoId = "PROD-" + codigo;
-        String pedidoId = "PED-" + codigo;
-        String itemId = "ITEM-" + codigo;
+
+        String produtoId =
+                "PROD-" + codigo;
+
+        String pedidoId =
+                "PED-" + codigo;
+
+        String itemPedidoId =
+                "ITEM-" + codigo;
+
+        String pedidoConcluidoId =
+                "PED-CONCLUIDO-" + codigo;
 
 
-        System.out.println("========== MARKET CORE ==========");
+        System.out.println(
+                "========== MARKET CORE =========="
+        );
 
 
         // =========================
@@ -56,15 +71,26 @@ public class TesteConexao {
 
         clienteService.cadastrarCliente(cliente);
 
-        System.out.println("\nCLIENTE CADASTRADO");
+        System.out.println(
+                "\nCLIENTE CADASTRADO"
+        );
 
 
         Cliente clienteEncontrado =
                 clienteService.buscarCliente(clienteId);
 
-        System.out.println("\nCLIENTE ENCONTRADO:");
-        System.out.println(clienteEncontrado);
+        System.out.println(
+                "\nCLIENTE ENCONTRADO:"
+        );
 
+        System.out.println(
+                clienteEncontrado
+        );
+
+
+        // =========================
+        // ATUALIZAR CLIENTE
+        // =========================
 
         clienteService.atualizarCliente(
                 clienteId,
@@ -72,11 +98,18 @@ public class TesteConexao {
                 "cliente.atualizado@teste.com"
         );
 
+
         Cliente clienteAtualizado =
                 clienteService.buscarCliente(clienteId);
 
-        System.out.println("\nCLIENTE ATUALIZADO:");
-        System.out.println(clienteAtualizado);
+
+        System.out.println(
+                "\nCLIENTE ATUALIZADO:"
+        );
+
+        System.out.println(
+                clienteAtualizado
+        );
 
 
         // =========================
@@ -90,17 +123,31 @@ public class TesteConexao {
                 4500.00
         );
 
+
         produtoService.cadastrarProduto(produto);
 
-        System.out.println("\nPRODUTO CADASTRADO");
+
+        System.out.println(
+                "\nPRODUTO CADASTRADO"
+        );
 
 
         Produto produtoEncontrado =
                 produtoService.buscarProduto(produtoId);
 
-        System.out.println("\nPRODUTO ENCONTRADO:");
-        System.out.println(produtoEncontrado);
 
+        System.out.println(
+                "\nPRODUTO ENCONTRADO:"
+        );
+
+        System.out.println(
+                produtoEncontrado
+        );
+
+
+        // =========================
+        // ATUALIZAR PRODUTO
+        // =========================
 
         produtoService.atualizarProduto(
                 produtoId,
@@ -109,56 +156,89 @@ public class TesteConexao {
                 8
         );
 
+
         Produto produtoAtualizado =
                 produtoService.buscarProduto(produtoId);
 
-        System.out.println("\nPRODUTO ATUALIZADO:");
-        System.out.println(produtoAtualizado);
-
-
-        // =========================
-        // CARRINHO
-        // =========================
-
-        Carrinho carrinho = new Carrinho();
-
-        ItemCarrinho itemCarrinho = new ItemCarrinho(
-                produtoAtualizado,
-                2
-        );
-
-        carrinho.adicionarItem(itemCarrinho);
-
-        System.out.println("\nCARRINHO CRIADO");
 
         System.out.println(
-                "TOTAL DO CARRINHO: R$ "
+                "\nPRODUTO ATUALIZADO:"
+        );
+
+        System.out.println(
+                produtoAtualizado
+        );
+
+
+        // =========================
+        // CARRINHO 1
+        // =========================
+
+        Carrinho carrinho =
+                new Carrinho();
+
+
+        ItemCarrinho itemCarrinho =
+                new ItemCarrinho(
+                        produtoAtualizado,
+                        2
+                );
+
+
+        carrinho.adicionarItem(
+                itemCarrinho
+        );
+
+
+        System.out.println(
+                "\nCARRINHO CRIADO"
+        );
+
+
+        System.out.println(
+                "TOTAL: R$ "
                         + carrinho.calcularTotal()
         );
 
+
         // =========================
-        // CRIAR PEDIDO PELO SERVICE
+        // PEDIDO 1
         // =========================
 
-        Pedido pedido = pedidoService.criarPedido(
-                clienteAtualizado,
-                pedidoId,
-                carrinho
+        Pedido pedido =
+                pedidoService.criarPedido(
+                        clienteAtualizado,
+                        pedidoId,
+                        carrinho
+                );
+
+
+        System.out.println(
+                "\nPEDIDO CADASTRADO:"
         );
 
-        System.out.println("\nPEDIDO CADASTRADO PELO SERVICE:");
-        System.out.println(pedido);
+        System.out.println(
+                pedido
+        );
 
 
         // =========================
-        // BUSCAR PEDIDO PELO SERVICE
+        // BUSCAR PEDIDO
         // =========================
 
         Pedido pedidoEncontrado =
-                pedidoService.buscarPedido(pedidoId);
+                pedidoService.buscarPedido(
+                        pedidoId
+                );
 
-        System.out.println("\nPEDIDO ENCONTRADO:");
-        System.out.println(pedidoEncontrado);
+
+        System.out.println(
+                "\nPEDIDO ENCONTRADO:"
+        );
+
+        System.out.println(
+                pedidoEncontrado
+        );
 
 
         // =========================
@@ -166,66 +246,161 @@ public class TesteConexao {
         // =========================
 
         itemPedidoRepository.cadastrarItemPedido(
-                itemId,
+                itemPedidoId,
                 pedidoId,
                 produtoId,
                 2,
                 produtoAtualizado.getPreco()
         );
 
-        System.out.println("\nITEM PEDIDO CADASTRADO");
+
+        System.out.println(
+                "\nITEM PEDIDO CADASTRADO"
+        );
 
 
-        // =========================
-        // BUSCAR ITENS DO PEDIDO
-        // =========================
+        // ==========================================
+        // CENÁRIO 1
+        // CANCELAMENTO VÁLIDO
+        // ==========================================
 
-        List<ItemPedido> itens =
-                itemPedidoRepository.buscarItensPorPedido(pedidoId);
+        System.out.println(
+                "\n========== CENÁRIO 1 =========="
+        );
 
-        System.out.println("\nITENS DO PEDIDO:");
 
-        for (ItemPedido item : itens) {
+        pedidoService.cancelarPedido(
+                pedidoId
+        );
 
-            System.out.println(
-                    "ID: " + item.getId()
+
+        Pedido pedidoCancelado =
+                pedidoService.buscarPedido(
+                        pedidoId
+                );
+
+
+        System.out.println(
+                "Status após cancelamento: "
+                        + pedidoCancelado.getStatus()
+        );
+
+
+        // ==========================================
+        // CENÁRIO 2
+        // CANCELAR PEDIDO JÁ CANCELADO
+        // ==========================================
+
+        System.out.println(
+                "\n========== CENÁRIO 2 =========="
+        );
+
+
+        try {
+
+            pedidoService.cancelarPedido(
+                    pedidoId
             );
 
-            System.out.println(
-                    "Pedido: " + item.getPedidoId()
-            );
+        } catch (IllegalStateException e) {
 
             System.out.println(
-                    "Produto: " + item.getProdutoId()
+                    "Erro esperado: "
+                            + e.getMessage()
             );
+        }
+
+
+        // ==========================================
+        // CENÁRIO 3
+        // PEDIDO CONCLUÍDO NÃO PODE SER CANCELADO
+        // ==========================================
+
+        System.out.println(
+                "\n========== CENÁRIO 3 =========="
+        );
+
+
+        // novo carrinho
+        Carrinho carrinho2 =
+                new Carrinho();
+
+
+        ItemCarrinho itemCarrinho2 =
+                new ItemCarrinho(
+                        produtoAtualizado,
+                        1
+                );
+
+
+        carrinho2.adicionarItem(
+                itemCarrinho2
+        );
+
+
+        // novo pedido
+        Pedido pedidoConcluido =
+                pedidoService.criarPedido(
+                        clienteAtualizado,
+                        pedidoConcluidoId,
+                        carrinho2
+                );
+
+
+        // finalizar
+        pedidoService.finalizarPedido(
+                pedidoConcluido,
+                carrinho2
+        );
+
+
+        // buscar novamente no banco
+        Pedido pedidoConcluidoBanco =
+                pedidoService.buscarPedido(
+                        pedidoConcluidoId
+                );
+
+
+        System.out.println(
+                "Status após finalização: "
+                        + pedidoConcluidoBanco.getStatus()
+        );
+
+
+        // tentar cancelar
+        try {
+
+            pedidoService.cancelarPedido(
+                    pedidoConcluidoId
+            );
+
+        } catch (IllegalStateException e) {
 
             System.out.println(
-                    "Quantidade: " + item.getQuantidade()
+                    "Erro esperado: "
+                            + e.getMessage()
             );
-
-            System.out.println(
-                    "Preço unitário: R$ "
-                            + item.getPrecoUnitario()
-            );
-
-            System.out.println("-------------------------");
         }
 
 
         // =========================
-        // LISTAR PEDIDOS PELO SERVICE
+        // LISTAR PEDIDOS
         // =========================
 
         System.out.println(
                 "\n========== PEDIDOS =========="
         );
 
+
         List<Pedido> pedidos =
                 pedidoService.listarPedidos();
 
+
         for (Pedido pedidoDaLista : pedidos) {
 
-            System.out.println(pedidoDaLista);
+            System.out.println(
+                    pedidoDaLista
+            );
 
             System.out.println(
                     "-------------------------"
@@ -234,30 +409,19 @@ public class TesteConexao {
 
 
         // =========================
-        // FINALIZAR PEDIDO
+        // LISTAR PRODUTOS
         // =========================
-
-        pedidoService.finalizarPedido(
-                pedido,
-                carrinho
-        );
-
-        System.out.println("\nPEDIDO FINALIZADO");
-
-
-        // BUSCA NOVAMENTE NO BANCO
-        Pedido pedidoFinalizado =
-                pedidoService.buscarPedido(pedidoId);
 
         System.out.println(
-                "\nPEDIDO APÓS FINALIZAÇÃO:"
+                "\n========== PRODUTOS =========="
         );
 
-        System.out.println(pedidoFinalizado);
+
+        produtoService.listarProdutos();
 
 
         // =========================
-        // TESTANDO DELETE
+        // EXCLUSÕES
         // =========================
 
         System.out.println(
@@ -265,37 +429,79 @@ public class TesteConexao {
         );
 
 
-        // primeiro ItemPedido por causa da FK
+        /*
+         * ORDEM IMPORTANTE:
+         *
+         * ItemPedido
+         * ↓
+         * Pedidos
+         * ↓
+         * Produto
+         * ↓
+         * Cliente
+         *
+         * Isso evita erro de Foreign Key.
+         */
 
-        itemPedidoRepository.excluirItemPedido(itemId);
+
+        // ITEM PEDIDO
+        itemPedidoRepository.excluirItemPedido(
+                itemPedidoId
+        );
+
 
         System.out.println(
                 "ItemPedido excluído."
         );
 
 
-        // agora usando PedidoService
-
-        pedidoService.excluirPedido(pedidoId);
-
-        System.out.println(
-                "Pedido excluído."
+        // PEDIDO 1
+        pedidoService.excluirPedido(
+                pedidoId
         );
 
 
-        produtoService.excluirProduto(produtoId);
+        System.out.println(
+                "Pedido cancelado excluído."
+        );
+
+
+        // PEDIDO 2
+        pedidoService.excluirPedido(
+                pedidoConcluidoId
+        );
+
+
+        System.out.println(
+                "Pedido concluído excluído."
+        );
+
+
+        // PRODUTO
+        produtoService.excluirProduto(
+                produtoId
+        );
+
 
         System.out.println(
                 "Produto excluído."
         );
 
 
-        clienteService.excluirCliente(clienteId);
+        // CLIENTE
+        clienteService.excluirCliente(
+                clienteId
+        );
+
 
         System.out.println(
                 "Cliente excluído."
         );
 
+
+        // =========================
+        // FIM
+        // =========================
 
         System.out.println(
                 "\n========== TESTE FINALIZADO =========="
