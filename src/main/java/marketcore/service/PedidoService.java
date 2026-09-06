@@ -1,11 +1,11 @@
 package marketcore.service;
 
 import marketcore.carrinho.Carrinho;
-import marketcore.carrinho.ItemCarrinho;
-import marketcore.cliente.Cliente;
+import marketcore.entidades.Cliente;
+import marketcore.exception.CancelamentoPedidoException;
 import marketcore.exception.CarrinhoVazioException;
-import marketcore.pedido.Pedido;
-import marketcore.pedido.StatusPedido;
+import marketcore.entidades.Pedido;
+import marketcore.enumpedido.StatusPedido;
 import marketcore.repository.PedidoRepository;
 
 
@@ -67,13 +67,13 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.buscarPedido(id);
 
         if (pedido.getStatus() == StatusPedido.CONCLUIDO) {
-            throw new IllegalStateException(
+            throw new CancelamentoPedidoException(
                     "Pedido concluido nao pode ser cancelado."
             );
         }
 
         if (pedido.getStatus() == StatusPedido.CANCELADO) {
-            throw new IllegalStateException(
+            throw new CancelamentoPedidoException(
                     "Pedido ja esta cancelado."
             );
         }

@@ -1,6 +1,6 @@
 package marketcore.service;
 
-import marketcore.produto.Produto;
+import marketcore.entidades.Produto;
 import marketcore.repository.ProdutoRepository;
 
 import java.util.List;

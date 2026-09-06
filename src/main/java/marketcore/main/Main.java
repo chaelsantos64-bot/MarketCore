@@ -2,9 +2,9 @@ package marketcore.main;
 
 import marketcore.carrinho.Carrinho;
 import marketcore.carrinho.ItemCarrinho;
-import marketcore.cliente.Cliente;
-import marketcore.pedido.Pedido;
-import marketcore.produto.Produto;
+import marketcore.entidades.Cliente;
+import marketcore.entidades.Pedido;
+import marketcore.entidades.Produto;
 import marketcore.repository.PedidoRepository;
 import marketcore.service.PedidoService;
 import marketcore.service.ProdutoService;

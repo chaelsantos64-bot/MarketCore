@@ -1,10 +1,10 @@
 package marketcore.repository;
 
-import marketcore.cliente.Cliente;
+import marketcore.entidades.Cliente;
 import marketcore.database.ConnectionFactory;
 import marketcore.exception.PedidoNaoEncontradoException;
-import marketcore.pedido.Pedido;
-import marketcore.pedido.StatusPedido;
+import marketcore.entidades.Pedido;
+import marketcore.enumpedido.StatusPedido;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

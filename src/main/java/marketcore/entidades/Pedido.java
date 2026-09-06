@@ -1,10 +1,8 @@
-package marketcore.pedido;
+package marketcore.entidades;
 
-import marketcore.carrinho.ItemCarrinho;
-import marketcore.cliente.Cliente;
+import marketcore.enumpedido.StatusPedido;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class Pedido {
     private Cliente cliente;

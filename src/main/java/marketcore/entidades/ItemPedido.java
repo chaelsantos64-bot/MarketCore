@@ -1,4 +1,4 @@
-package marketcore.pedido;
+package marketcore.entidades;
 
 public class ItemPedido {
 

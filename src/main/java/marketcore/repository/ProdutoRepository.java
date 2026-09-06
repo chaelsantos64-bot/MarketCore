@@ -2,7 +2,7 @@ package marketcore.repository;
 
 import marketcore.database.ConnectionFactory;
 import marketcore.exception.ProdutoNaoEncontradoException;
-import marketcore.produto.Produto;
+import marketcore.entidades.Produto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

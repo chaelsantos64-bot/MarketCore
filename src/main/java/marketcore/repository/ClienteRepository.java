@@ -1,6 +1,6 @@
 package marketcore.repository;
 
-import marketcore.cliente.Cliente;
+import marketcore.entidades.Cliente;
 import marketcore.database.ConnectionFactory;
 import marketcore.exception.ClienteNaoEncontradoException;
 

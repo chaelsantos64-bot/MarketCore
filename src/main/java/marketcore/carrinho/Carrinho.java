@@ -1,6 +1,6 @@
 package marketcore.carrinho;
 
-import marketcore.produto.Produto;
+import marketcore.entidades.Produto;
 
 import java.util.ArrayList;
 import java.util.List;

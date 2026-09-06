@@ -2,18 +2,16 @@ package marketcore.main;
 
 import marketcore.carrinho.Carrinho;
 import marketcore.carrinho.ItemCarrinho;
-import marketcore.cliente.Cliente;
-import marketcore.pedido.ItemPedido;
-import marketcore.pedido.Pedido;
-import marketcore.pedido.StatusPedido;
-import marketcore.produto.Produto;
+import marketcore.entidades.Cliente;
+import marketcore.exception.CancelamentoPedidoException;
+import marketcore.entidades.Pedido;
+import marketcore.entidades.Produto;
 import marketcore.repository.ItemPedidoRepository;
 import marketcore.repository.PedidoRepository;
 import marketcore.service.ClienteService;
 import marketcore.service.PedidoService;
 import marketcore.service.ProdutoService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class TesteConexao {
@@ -302,7 +300,7 @@ public class TesteConexao {
                     pedidoId
             );
 
-        } catch (IllegalStateException e) {
+        } catch (CancelamentoPedidoException e) {
 
             System.out.println(
                     "Erro esperado: "
@@ -374,7 +372,7 @@ public class TesteConexao {
                     pedidoConcluidoId
             );
 
-        } catch (IllegalStateException e) {
+        } catch (CancelamentoPedidoException e) {
 
             System.out.println(
                     "Erro esperado: "

@@ -1,4 +1,4 @@
-package marketcore.pedido;
+package marketcore.enumpedido;
 
 public enum StatusPedido {
     CANCELADO(1),

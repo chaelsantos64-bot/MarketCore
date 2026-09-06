@@ -1,11 +1,8 @@
 package marketcore.service;
 
-import marketcore.cliente.Cliente;
-import marketcore.exception.ClienteNaoEncontradoException;
-import marketcore.produto.Produto;
+import marketcore.entidades.Cliente;
 import marketcore.repository.ClienteRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

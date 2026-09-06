@@ -1,4 +1,4 @@
-package marketcore.produto;
+package marketcore.entidades;
 
 import marketcore.exception.EstoqueInsuficienteException;
 

@@ -1,4 +1,4 @@
-package marketcore.cliente;
+package marketcore.entidades;
 
 public class Cliente {
     private Long id;

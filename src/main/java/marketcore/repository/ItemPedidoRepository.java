@@ -3,8 +3,7 @@ package marketcore.repository;
 
 import marketcore.database.ConnectionFactory;
 import marketcore.exception.PedidoNaoEncontradoException;
-import marketcore.pedido.ItemPedido;
-import marketcore.pedido.Pedido;
+import marketcore.entidades.ItemPedido;
 
 
 import java.sql.Connection;
