@@ -1,19 +1,21 @@
 package marketcore.estoque;
 
-import marketcore.entidades.Produto;
 
 public class EstoqueService {
-    private Produto produto;
-
-    public EstoqueService(Produto produto) {
-        this.produto = produto;
+    public Boolean verificarDisponibilidade(
+            Estoque estoque, int quantidDesejada){
+        if (estoque.getQuantidadeDisponivel() >= quantidDesejada) {
+            return true;
+        }
+        return false;
     }
 
-    public Produto getProduto() {
-        return produto;
-    }
+    public void reduzirEstoque(Estoque estoque, int quantidade){
+        int novaQuantidade =
+                estoque.getQuantidadeDisponivel() - quantidade;
 
-    public int getQuantidadeDisponivel() {
-        return produto.getQuantidade();
+        if (novaQuantidade >= quantidade) {
+
+        }
     }
 }
