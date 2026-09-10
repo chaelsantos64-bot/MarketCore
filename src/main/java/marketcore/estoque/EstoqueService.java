@@ -1,8 +1,7 @@
 package marketcore.estoque;
 
-
-import marketcore.exception.CancelamentoPedidoException;
 import marketcore.exception.EstoqueInsuficienteException;
+import marketcore.exception.QuantidadeInvalidaException;
 
 public class EstoqueService {
     public boolean verificarDisponibilidade(
@@ -15,7 +14,7 @@ public class EstoqueService {
 
     public void reduzirEstoque(Estoque estoque, int quantidade) {
         if (quantidade <= 0) {
-            throw new IllegalArgumentException(
+            throw new QuantidadeInvalidaException(
                     "Quantidade deve ser maior que zero"
             );
         }
@@ -33,8 +32,8 @@ public class EstoqueService {
 
     public void adicionarEstoque(Estoque estoque, int quantidade){
         if (quantidade <= 0) {
-            throw new EstoqueInsuficienteException(
-                    "Estoque insuficiente"
+            throw new QuantidadeInvalidaException(
+                    "Quantidade deve ser maior que zero"
             );
         }
 
@@ -44,8 +43,8 @@ public class EstoqueService {
     }
     public void devolverEstoque(Estoque estoque, int quantidade){
         if (quantidade <= 0) {
-            throw new EstoqueInsuficienteException(
-                    "Estoque insuficiente"
+            throw new QuantidadeInvalidaException(
+                    "Quantidade deve ser maior que zero"
             );
         }
         int qDevolvida = estoque.getQuantidadeDisponivel() + quantidade;
