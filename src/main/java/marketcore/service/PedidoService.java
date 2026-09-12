@@ -1,7 +1,11 @@
 package marketcore.service;
 
 import marketcore.carrinho.Carrinho;
+import marketcore.carrinho.ItemCarrinho;
 import marketcore.entidades.Cliente;
+import marketcore.entidades.Produto;
+import marketcore.estoque.Estoque;
+import marketcore.estoque.EstoqueService;
 import marketcore.exception.CancelamentoPedidoException;
 import marketcore.exception.CarrinhoVazioException;
 import marketcore.entidades.Pedido;
@@ -14,6 +18,7 @@ import java.util.List;
 
 public class PedidoService {
     private PedidoRepository pedidoRepository;
+    private EstoqueService estoqueService;
 
     public PedidoService(PedidoRepository pedidoRepository) {
         this.pedidoRepository = pedidoRepository;
@@ -55,7 +60,13 @@ public class PedidoService {
     }
 
     public void finalizarPedido(Pedido pedido, Carrinho carrinho) {
+        for (ItemCarrinho item : carrinho.getItens()) {
+            Produto produto = item.getProduto();
+            int  quantidade = item.getQuantidade();
+            Estoque estoque = new Estoque(produto);
+            estoqueService.reduzirEstoque(estoque, quantidade);
 
+        }
         carrinho.finalizarCompras();
         pedido.setStatus(StatusPedido.CONCLUIDO);
         pedidoRepository.atualizarPedido(pedido);
